@@ -49,7 +49,7 @@ function rectangle:applyForce(vect)
     self.acceleration.y = self.acceleration.y + vect.y
 end
 
-function rectangle:update(dt, rectangles)
+function rectangle:update(dt, listOfRectangles)
     self.velocity = (self.velocity + self.acceleration + self.gravity) * self.airFriction
     self.origin = self.origin + (self.velocity * dt)
     self.acceleration.x, self.acceleration.y = 0, 0
@@ -57,59 +57,61 @@ function rectangle:update(dt, rectangles)
     self.touchLeft = false
     self.touchTop = false
     self.touchRight = false
-    if rectangles then
-        for i, rect in ipairs(rectangles) do
-            if self ~= rect and self:intersects(rect) then
-                if self.velocity.y > 0 then
-                    if self.velocity.x > 0 then
-                        if self:distanceFromTopOf(rect) > self:distanceFromLeftOf(rect) then
-                            self:matchTopOf(rect)
-                            self.touchBottom = true
-                            self.velocity.y = -self.velocity.y * self.bouncyness * rect.bouncyness
-                            self.velocity.x = self.velocity.x * rect.friction
+    if listOfRectangles then
+        for i, rectangles in ipairs(listOfRectangles) do
+            for j, rect in ipairs(rectangles) do
+                if self ~= rect and self:intersects(rect) then
+                    if self.velocity.y > 0 then
+                        if self.velocity.x > 0 then
+                            if self:distanceFromTopOf(rect) > self:distanceFromLeftOf(rect) then
+                                self:matchTopOf(rect)
+                                self.touchBottom = true
+                                self.velocity.y = -self.velocity.y * self.bouncyness * rect.bouncyness
+                                self.velocity.x = self.velocity.x * rect.friction
+                            else
+                                self:matchLeftOf(rect)
+                                self.touchLeft = true
+                                self.velocity.x = -self.velocity.x * self.bouncyness * rect.bouncyness
+                                self.velocity.y = self.velocity.y * rect.friction
+                            end
                         else
-                            self:matchLeftOf(rect)
-                            self.touchLeft = true
-                            self.velocity.x = -self.velocity.x * self.bouncyness * rect.bouncyness
-                            self.velocity.y = self.velocity.y * rect.friction
+                            if self:distanceFromTopOf(rect) > self:distanceFromRightOf(rect) then
+                                self:matchTopOf(rect)
+                                self.touchBottom = true
+                                self.velocity.y = -self.velocity.y * self.bouncyness * rect.bouncyness
+                                self.velocity.x = self.velocity.x * rect.friction
+                            else
+                                self:matchRightOf(rect)
+                                self.touchRight = true
+                                self.velocity.x = -self.velocity.x * self.bouncyness * rect.bouncyness
+                                self.velocity.y = self.velocity.y * rect.friction
+                            end
                         end
                     else
-                        if self:distanceFromTopOf(rect) > self:distanceFromRightOf(rect) then
-                            self:matchTopOf(rect)
-                            self.touchBottom = true
-                            self.velocity.y = -self.velocity.y * self.bouncyness * rect.bouncyness
-                            self.velocity.x = self.velocity.x * rect.friction
+                        if self.velocity.x > 0 then
+                            if self:distanceFromBottomOf(rect) > self:distanceFromLeftOf(rect) then
+                                self:matchBottomOf(rect)
+                                self.touchTop = true
+                                self.velocity.y = -self.velocity.y * self.bouncyness * rect.bouncyness
+                                self.velocity.x = self.velocity.x * rect.friction
+                            else
+                                self:matchLeftOf(rect)
+                                self.touchLeft = true
+                                self.velocity.x = -self.velocity.x * self.bouncyness * rect.bouncyness
+                                self.velocity.y = self.velocity.y * rect.friction
+                            end
                         else
-                            self:matchRightOf(rect)
-                            self.touchRight = true
-                            self.velocity.x = -self.velocity.x * self.bouncyness * rect.bouncyness
-                            self.velocity.y = self.velocity.y * rect.friction
-                        end
-                    end
-                else
-                    if self.velocity.x > 0 then
-                        if self:distanceFromBottomOf(rect) > self:distanceFromLeftOf(rect) then
-                            self:matchBottomOf(rect)
-                            self.touchTop = true
-                            self.velocity.y = -self.velocity.y * self.bouncyness * rect.bouncyness
-                            self.velocity.x = self.velocity.x * rect.friction
-                        else
-                            self:matchLeftOf(rect)
-                            self.touchLeft = true
-                            self.velocity.x = -self.velocity.x * self.bouncyness * rect.bouncyness
-                            self.velocity.y = self.velocity.y * rect.friction
-                        end
-                    else
-                        if self:distanceFromBottomOf(rect) > self:distanceFromRightOf(rect) then
-                            self:matchBottomOf(rect)
-                            self.touchTop = true
-                            self.velocity.y = -self.velocity.y * self.bouncyness * rect.bouncyness
-                            self.velocity.x = self.velocity.x * rect.friction
-                        else
-                            self:matchRightOf(rect)
-                            self.touchRight = true
-                            self.velocity.x = -self.velocity.x * self.bouncyness * rect.bouncyness
-                            self.velocity.y = self.velocity.y * rect.friction
+                            if self:distanceFromBottomOf(rect) > self:distanceFromRightOf(rect) then
+                                self:matchBottomOf(rect)
+                                self.touchTop = true
+                                self.velocity.y = -self.velocity.y * self.bouncyness * rect.bouncyness
+                                self.velocity.x = self.velocity.x * rect.friction
+                            else
+                                self:matchRightOf(rect)
+                                self.touchRight = true
+                                self.velocity.x = -self.velocity.x * self.bouncyness * rect.bouncyness
+                                self.velocity.y = self.velocity.y * rect.friction
+                            end
                         end
                     end
                 end

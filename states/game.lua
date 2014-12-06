@@ -30,12 +30,6 @@ function game:init()
         }
     }
     self.enemies = {
-        chomp = require "states.enemies.chomp",
-        chomp = require "states.enemies.chomp",
-        chomp = require "states.enemies.chomp",
-        chomp = require "states.enemies.chomp",
-        chomp = require "states.enemies.chomp",
-        chomp = require "states.enemies.chomp",
         chomp = require "states.enemies.chomp"
     }
     self.waves = {
@@ -43,8 +37,11 @@ function game:init()
     }
     self.instances = {
         enemies = {
-            self.enemies.chomp()
+            self.enemies.chomp(100, 100)
         }
+    }
+    self.enemyRectangles = {
+        self.instances.enemies[1].rectangle
     }
 end
 
@@ -69,10 +66,10 @@ function game:update(dt)
         direction.x = direction.x + 1
     end
     self.player.rectangle:applyForce(direction:normalized() * 100)
-    self.player.rectangle:update(dt, self.world)
+    self.player.rectangle:update(dt, {self.world, self.enemyRectangles})
     
-    for i, enemy in ipairs(self.instances.enemies) do
-        enemy:update(dt)
+    for index, enemy in ipairs(self.instances.enemies) do
+        enemy:update(dt, {self.world, self.enemies})
     end
 end
 

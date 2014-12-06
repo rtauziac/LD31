@@ -11,7 +11,7 @@ local function new(x, y)
                 local playerPos = playerRectangle.origin
                 local direction = (playerPos - self.rectangle.origin):normalized()
                 self.rectangle:applyForce({x = direction.x * speed, y = direction.y * speed})
-                self.rectangle:update(dt)
+                self.rectangle:update(dt, {global.states.game.world, global.states.game.enemyRectangles})
                 if self.rectangle:intersects(playerRectangle) then
                     local feedback = global.constants.feedback
                     global.states.game.player.health = global.states.game.player.health - 0.01 -- hit
