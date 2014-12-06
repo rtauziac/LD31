@@ -15,7 +15,7 @@ windowSize = {
 
 global = {
     constants = {
-        feedback = 150
+        feedback = 500
     },
     canvases = {
         main = Nil -- set in load()

@@ -30,6 +30,12 @@ function game:init()
         }
     }
     self.enemies = {
+        chomp = require "states.enemies.chomp",
+        chomp = require "states.enemies.chomp",
+        chomp = require "states.enemies.chomp",
+        chomp = require "states.enemies.chomp",
+        chomp = require "states.enemies.chomp",
+        chomp = require "states.enemies.chomp",
         chomp = require "states.enemies.chomp"
     }
     self.waves = {
@@ -44,8 +50,8 @@ end
 
 function game:update(dt)
 
-    if self.player.health >= 0 then
-        
+    if self.player.health <= 0 then
+        print("player dead")
     end
     
     local direction = Vector2(0, 0)

@@ -2,9 +2,9 @@
 
 local chomp = {}
 
-local function new()
+local function new(x, y)
     return setmetatable({
-        rectangle = Rectangle(0, 0, 25, 25, 0, 0, 0, 0, 1, 1, 0.9),
+        rectangle = Rectangle(x or 0, y or 0, 25, 25, 0, 0, 0, 0, 1, 1, 0.9),
         update = function(self, dt)
                 local speed = 25
                 local playerRectangle = global.states.game.player.rectangle
@@ -14,8 +14,9 @@ local function new()
                 self.rectangle:update(dt)
                 if self.rectangle:intersects(playerRectangle) then
                     local feedback = global.constants.feedback
-                    global.states.game.player.health = global.states.game.player.health - 0.1 -- hit
+                    global.states.game.player.health = global.states.game.player.health - 0.01 -- hit
                     self.rectangle:applyForce({x = -direction.x * feedback, y = -direction.y * feedback})
+                    playerRectangle:applyForce({x = direction.x * feedback, y = direction.y * feedback})
                 end
             end,
         draw = function(self)

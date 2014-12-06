@@ -45,13 +45,14 @@ function rectangle:__tostring()
 end
 
 function rectangle:applyForce(vect)
-    self.acceleration.x = vect.x
-    self.acceleration.y = vect.y
+    self.acceleration.x = self.acceleration.x + vect.x
+    self.acceleration.y = self.acceleration.y + vect.y
 end
 
 function rectangle:update(dt, rectangles)
     self.velocity = (self.velocity + self.acceleration + self.gravity) * self.airFriction
     self.origin = self.origin + (self.velocity * dt)
+    self.acceleration.x, self.acceleration.y = 0, 0
     self.touchBottom = false
     self.touchLeft = false
     self.touchTop = false
