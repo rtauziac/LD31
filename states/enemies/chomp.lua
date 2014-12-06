@@ -1,16 +1,30 @@
 -- chomp.lua
 
-local chomp = {
-    rectangle = Rectangle(0, 0, 25, 25, 0, 0, 0, 0, 1, 1, 0.7)
-}
+local chomp = {}
 
-function chomp:update()
-    local playerPos = global.states.game.player.rectangle.origin
-    -- self.rectangle:applyForce()
+local function new()
+    return setmetatable({
+        rectangle = Rectangle(0, 0, 25, 25, 0, 0, 0, 0, 1, 1, 0.9),
+        update = function(self, dt)
+                local speed = 25
+                local playerRectangle = global.states.game.player.rectangle
+                local playerPos = playerRectangle.origin
+                local direction = (playerPos - self.rectangle.origin):normalized()
+                self.rectangle:applyForce({x = direction.x * speed, y = direction.y * speed})
+                self.rectangle:update(dt)
+                if self.rectangle:intersects(playerRectangle) then
+                    local feedback = global.constants.feedback
+                    global.states.game.player.health = global.states.game.player.health - 0.1 -- hit
+                    self.rectangle:applyForce({x = -direction.x * feedback, y = -direction.y * feedback})
+                end
+            end,
+        draw = function(self)
+                love.graphics.setColor(0, 0, 0, 255)
+                love.graphics.rectangle("fill", self.rectangle.origin.x, self.rectangle.origin.y, self.rectangle.size.x, self.rectangle.size.y)
+            end
+    },
+    chomp)
 end
 
-function chomp:draw()
-    love.graphics.rectangle("fill", self.rectangle.origin.x, self.rectangle.origin.y, self.rectangle.size.x, self.rectangle.size.y)
-end
-
-return chomp
+return setmetatable({new = new},
+{__call = function(_, ...) return new(...) end})

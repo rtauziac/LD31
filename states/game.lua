@@ -2,6 +2,13 @@
 
 local game = {}
 
+local entityState = {
+    idle = 0,
+    running = 1,
+    dancing = 2,
+    dead = 3
+}
+
 function game:init()
     self.world = {
         Rectangle(0, 0, 100, designResolution.height),
@@ -12,6 +19,7 @@ function game:init()
     self.player = {
         rectangle = Rectangle(20, 20, 30, 30, 0, 0, 0, 0, 0.1, 0.6, 0.8),
         health = 1,
+        state = entityState.idle,
         draw = function (self)
                 love.graphics.setColor(0, 0, 0, 255)
                 love.graphics.draw(self.images.idle, self.rectangle.origin.x, self.rectangle.origin.y - self.rectangle.size.y * 2, 0, 0.323, 0.27) -- micro optim
@@ -20,20 +28,26 @@ function game:init()
         images = {
             idle = love.graphics.newImage("resources/hero.png")
         }
-    },
+    }
     self.enemies = {
         chomp = require "states.enemies.chomp"
-    },
+    }
     self.waves = {
         
-    },
+    }
     self.instances = {
         enemies = {
+            self.enemies.chomp()
         }
     }
 end
 
 function game:update(dt)
+
+    if self.player.health >= 0 then
+        
+    end
+    
     local direction = Vector2(0, 0)
     if love.keyboard.isDown("up") then
         direction.y = -1
@@ -50,11 +64,18 @@ function game:update(dt)
     end
     self.player.rectangle:applyForce(direction:normalized() * 100)
     self.player.rectangle:update(dt, self.world)
+    
+    for i, enemy in ipairs(self.instances.enemies) do
+        enemy:update(dt)
+    end
 end
 
 function game:draw()
     global.canvases.main:clear(255, 255, 255, 255)
     love.graphics.setCanvas(global.canvases.main)
+    for i, enemy in ipairs(self.instances.enemies) do
+        enemy:draw()
+    end
     self.player:draw()
     love.graphics.setCanvas()
 end

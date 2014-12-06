@@ -14,12 +14,15 @@ windowSize = {
 }
 
 global = {
+    constants = {
+        feedback = 150
+    },
     canvases = {
         main = Nil -- set in load()
     },
     states = {
-        menu = require "states/menu",
-        game = require "states/game"
+        menu = require "states.menu",
+        game = require "states.game"
     },
     options = {}
 }
