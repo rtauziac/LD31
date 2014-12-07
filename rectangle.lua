@@ -62,6 +62,7 @@ function rectangle:update(dt, listOfRectangles)
             for j, rect in ipairs(rectangles) do
                 if self ~= rect and self:intersects(rect) then
                     if self.velocity.y > 0 then
+                    -- if self.origin.y > rect.origin.y + (self.size.y / 2 + rect.size.y / 2) then
                         if self.velocity.x > 0 then
                             if self:distanceFromTopOf(rect) > self:distanceFromLeftOf(rect) then
                                 self:matchTopOf(rect)

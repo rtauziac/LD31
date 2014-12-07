@@ -5,9 +5,9 @@
 
     t.window.title = "LArse"          -- The window title (string)
     t.window.width = 640               -- The window width (number)
-    t.window.height = 480               -- The window height (number)
+    t.window.height = 360               -- The window height (number)
     t.window.minwidth = 640            -- Minimum window width if the window is resizable (number)
-    t.window.minheight = 480           -- Minimum window height if the window is resizable (number)
+    t.window.minheight = 360           -- Minimum window height if the window is resizable (number)
     t.window.resizable = true
     t.window.highdpi = true            -- Enable high-dpi mode for the window on a Retina display (boolean). Added in 0.9.1
     t.window.display = 1               -- Index of the monitor to show the window in (number)
