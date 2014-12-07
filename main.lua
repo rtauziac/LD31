@@ -13,6 +13,16 @@ windowSize = {
     height = 0
 }
 
+sounds = {
+    static = love.audio.newSource("resources/static.mp3", "stream"),
+    step = love.audio.newSource("resources/step.ogg", "static"),
+    death = love.audio.newSource("resources/death.ogg", "static"),
+    ouch = love.audio.newSource("resources/ouch.ogg", "static"),
+    lavaOut = love.audio.newSource("resources/lavaOut.ogg", "static"),
+    vanishing = love.audio.newSource("resources/vanishing.ogg", "static"),
+    dong = love.audio.newSource("resources/dong.ogg", "static")
+}
+
 global = {
     t = 0,
     constants = {

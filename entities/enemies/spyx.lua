@@ -70,6 +70,10 @@ local function new(x, y)
                         return self.images[math.floor(1+(math.min(13*t, 10)))]
                     end
             }
+        },
+        sounds = {
+            lavaOut = sounds.lavaOut:clone(),
+            vanishing = sounds.vanishing:clone()
         }
     }
     
@@ -90,6 +94,8 @@ local function new(x, y)
                 if self.state ~= entityState.dying then
                     self.state = entityState.dying
                     self.animationOffsetTime = 0
+                    self.sounds.vanishing:setPitch(0.8 + math.random()*0.4)
+                    self.sounds.vanishing:play()
                 end
             end
             

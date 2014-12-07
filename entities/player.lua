@@ -12,7 +12,9 @@ local player = {
     state = entityState.idle, -- the state of the player, defines the behavior and the animations
     facingRight = true, -- defines the direction where the player looks
     animationOffsetTime = 0 ,-- the offset of the animation
-    
+    soundSchedule = {
+        step = 0
+    },
     animations = {
         idle = {
             offset = Vector2(0, -240),
@@ -78,26 +80,37 @@ local player = {
 function player:update(dt)
     self.animationOffsetTime = self.animationOffsetTime + dt
     
-    if self.health < self.previousHealth then
+    if self.health < self.previousHealth and self.health >= 0 then
         self.state = entityState.hurt
+        animationOffsetTime = 0
+        sounds.ouch:setPitch(0.8 + math.random()*0.4)
+        sounds.ouch:play()
     end
    self.previousHealth = self.health
     if self.health <= 0 then
         if self.state ~= entityState.dead then
             animationOffsetTime = 0 
+            print(self.state)
             self.state = entityState.dead
+            sounds.death:play()
             self.rectangle.airFriction = playerSharedData.startAirFriction * 0.6
         end
     else
         if self.state == entityState.hurt and self.animationOffsetTime <= self.animations.hurt.duration then
-            if self.state ~= entityState.hurt then
-                animationOffsetTime = 0
-            end
-        elseif self.rectangle.velocity:len2() > 400000 then
+            -- if self.state ~= entityState.hurt then
+                -- animationOffsetTime = 0
+            -- end
+        elseif self.rectangle.velocity:len2() > 300000 then
             if self.state ~= entityState.running then
                 -- print("running")
                 self.animationOffsetTime = 0
             end
+            if self.soundSchedule.step > self.animationOffsetTime % 0.23 then
+                sounds.step:rewind()
+                sounds.step:setPitch(0.8 + math.random()*0.4)
+                sounds.step:play()
+            end
+            self.soundSchedule.step = self.animationOffsetTime % 0.23
             self.state = entityState.running
         else
             if self.state ~= entityState.idle then
