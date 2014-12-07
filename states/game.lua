@@ -11,19 +11,19 @@ function game:init()
     }
     self.player = require "entities.player"
     self.enemies = {
-        chomp = require "entities.enemies.chomp"
+        spyx = require "entities.enemies.spyx"
     }
     self.waves = {
         
     }
     self.planWave = function(self, level)
             for i = 1, 1 + math.floor(level) do
-                table.insert(self.waves, {enemy = self.enemies.chomp(100 + math.random() * (designResolution.width - 300), 300 + math.random() * (designResolution.height - 400)), t = os.time() + i})
+                table.insert(self.waves, {enemy = self.enemies.spyx(100 + math.random() * (designResolution.width - 200 - self.enemies.spyx.size.x), 300 + math.random() * (designResolution.height - 400)), t = os.time() + i})
             end
         end
     self.instances = {
         enemies = {
-            -- self.enemies.chomp(100, 100)
+            -- self.enemies.spyx(100, 100)
         }
     }
     self.enemyRectangles = {
