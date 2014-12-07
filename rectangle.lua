@@ -1,6 +1,6 @@
 ﻿-- rectangle
 
-vector = require 'hump.vector'
+-- Vector2 = require 'hump.vector'
 
 local assert = assert
 local sqrt, cos, sin, atan2 , max, min, abs = math.sqrt, math.cos, math.sin, math.atan2, math.max, math.min, math.abs
@@ -11,10 +11,10 @@ rectangle.__index = rectangle
 local function new(x ,y ,w ,h, vx, vy, ax, ay, friction, bouncyness, airfric)
     return setmetatable(
     {
-        origin = vector.new(x, y),
-        size = vector.new(w, h),
-        velocity = vector.new(vx or 0, vy or 0),
-        acceleration = vector.new(ax or 0, ay or 0),
+        origin = Vector2.new(x, y),
+        size = Vector2.new(w, h),
+        velocity = Vector2.new(vx or 0, vy or 0),
+        acceleration = Vector2.new(ax or 0, ay or 0),
         friction = friction or 0.98,
         bouncyness = bouncyness or 0,
         touchBottom = false,
@@ -22,7 +22,7 @@ local function new(x ,y ,w ,h, vx, vy, ax, ay, friction, bouncyness, airfric)
         touchTop = false,
         touchRight = false,
         airFriction = airfric or 1,
-        gravity = vector.new(0, 0)
+        gravity = Vector2.new(0, 0)
     },
     rectangle)
 end

@@ -1,4 +1,4 @@
- designResolution = {width = 1920, height = 1080}
+ designResolution = {width = 3840, height = 2160}
  
  function love.conf(t)
     t.console = false                   -- Attach a console (boolean, Windows only)

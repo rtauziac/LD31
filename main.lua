@@ -15,7 +15,7 @@ windowSize = {
 
 global = {
     constants = {
-        feedback = 500
+        feedback = 700
     },
     canvases = {
         main = Nil -- set in load()
@@ -27,7 +27,13 @@ global = {
     options = {}
 }
 
--- require other states
+entityState = {
+    idle = 0,
+    running = 1,
+    hurt = 2,
+    dancing = 3,
+    dead = 4
+}
 
 function love.load()
     global.canvases.main = love.graphics.newCanvas(designResolution.width, designResolution.height)
