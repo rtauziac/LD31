@@ -1,7 +1,11 @@
 -- player.lua
 
+local playerSharedData = {
+    startAirFriction = 0.8
+}
+
 local player = {
-    rectangle = Rectangle(designResolution.width/2, designResolution.height/2, 200, 200, 0, 0, 0, 0, 0.1, 0.6, 0.8),
+    rectangle = Rectangle(designResolution.width/2, designResolution.height/2, 200, 200, 0, 0, 0, 0, 0.1, 0.6, playerSharedData.startAirFriction),
     health = 1, -- the health of the player 1...0
     previousHealth = 1,
     speed = 250,
@@ -82,7 +86,7 @@ function player:update(dt)
         if self.state ~= entityState.dead then
             animationOffsetTime = 0 
             self.state = entityState.dead
-            self.rectangle.airFriction = 0.6
+            self.rectangle.airFriction = playerSharedData.startAirFriction * 0.6
         end
     else
         if self.state == entityState.hurt and self.animationOffsetTime <= self.animations.hurt.duration then
@@ -140,6 +144,13 @@ end
 
 function player:hurt(damage)
     self.health = self.health - damage
+end
+
+function player:respawn()
+    self.health = 1
+    self.rectangle.airFriction = playerSharedData.startAirFriction
+    self.rectangle.origin.x, self.rectangle.origin.y = designResolution.width/2, designResolution.height/2
+    self.state = entityState.idle
 end
 
 return player

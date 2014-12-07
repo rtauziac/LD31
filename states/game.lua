@@ -46,7 +46,8 @@ function game:init()
 end
 
 function game:newGame()
-    
+    self.level = 0
+    self.player:respawn()
 end
 
 function game:update(dt)
@@ -93,9 +94,13 @@ function game:update(dt)
         enemy:update(dt, {self.world})
     end
     
-    if #self.instances.enemies == 0  and #self.waves == 0 and self.plan == nil and self.player.state ~= entityState.dead then
-        self:planWave(self.level)
-        self.level = self.level + 1
+    if #self.instances.enemies == 0  and #self.waves == 0 and self.plan == nil then
+        if self.player.state == entityState.dead then
+            self:newGame()
+        else
+            self:planWave(self.level)
+            self.level = self.level + 1
+        end
     end
 end
 
