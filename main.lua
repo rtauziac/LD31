@@ -32,7 +32,8 @@ entityState = {
     running = 1,
     hurt = 2,
     dancing = 3,
-    dead = 4
+    spawn = 4,
+    dead = -1
 }
 
 function love.load()
@@ -60,4 +61,5 @@ end
 function love.draw()
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.draw(global.canvases.main, 0, 0, 0, windowSize.width / designResolution.width, windowSize.height / designResolution.height)
+    global.canvases.main:clear(255, 255, 255, 255)
 end
