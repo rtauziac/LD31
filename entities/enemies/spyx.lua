@@ -10,7 +10,7 @@ local function new(x, y)
         totalLifeTime = 5 + rand,
         state = entityState.spawn,
         facingRight = true, -- defines if the sprite is facing right or left
-        timeBeforeSpawn = 0.6, -- the time the enemy takes to spawn
+        timeBeforeSpawn = 0.53, -- the time the enemy takes to spawn
         animationOffsetTime = 0 ,-- the offset of the animation
         update = function(self, dt) 
                 self.animationOffsetTime = self.animationOffsetTime + dt
@@ -48,7 +48,10 @@ local function new(x, y)
         draw = function(self)
                 local offset = Vector2(0, 0)
                 local sprite
-                if self.state == entityState.running then
+                if self.state == entityState.spawn then
+                    sprite = self.animations.spawn:animation(self.animationOffsetTime)
+                    offset = self.animations.spawn.offset
+                elseif self.state == entityState.running then
                     sprite = self.animations.running:animation(self.animationOffsetTime)
                     offset = self.animations.running.offset
                 end
@@ -60,9 +63,8 @@ local function new(x, y)
                         love.graphics.draw(sprite, self.rectangle.origin.x + (self.rectangle.size.x - offset.x), self.rectangle.origin.y + offset.y, 0, -1, 1)
                     end
                 end
-                
-                love.graphics.setColor(0, 0, 0, 255)
-                love.graphics.rectangle("line", self.rectangle.origin.x, self.rectangle.origin.y, self.rectangle.size.x, self.rectangle.size.y)
+                -- love.graphics.setColor(0, 0, 0, 255)
+                -- love.graphics.rectangle("line", self.rectangle.origin.x, self.rectangle.origin.y, self.rectangle.size.x, self.rectangle.size.y)
             end,
         animations = {
             running = {
@@ -76,6 +78,21 @@ local function new(x, y)
                 animation = function (self, t)
                         return self.images[math.floor(1+(10*t%4))]
                     end
+            },
+            spawn = {
+                offset = Vector2(-50, -120),
+                images = {
+                    love.graphics.newImage("resources/spyx/spyx_spawn_1.png"),
+                    love.graphics.newImage("resources/spyx/spyx_spawn_2.png"),
+                    love.graphics.newImage("resources/spyx/spyx_spawn_3.png"),
+                    love.graphics.newImage("resources/spyx/spyx_spawn_4.png"),
+                    love.graphics.newImage("resources/spyx/spyx_spawn_5.png"),
+                    love.graphics.newImage("resources/spyx/spyx_spawn_6.png"),
+                    love.graphics.newImage("resources/spyx/spyx_spawn_7.png")
+                },
+                animation = function (self, t)
+                        return self.images[math.floor(1+(math.min(13*t, 6)))]
+                    end,
             }
         }
     },
