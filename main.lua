@@ -1,9 +1,9 @@
 -- main.lua
 
 Gamestate = require "hump.gamestate"
-Camera = require "hump.camera"
+-- Camera = require "hump.camera"
 Vector2 = require "hump.vector"
-Timer = require "hump.timer"
+-- Timer = require "hump.timer"
 Rectangle = require "rectangle"
 
 Nil = {} -- a nil pointer
@@ -14,6 +14,7 @@ windowSize = {
 }
 
 global = {
+    t = 0,
     constants = {
         feedback = 700
     },
@@ -55,11 +56,11 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-    Timer.update(dt)
+    global.t = global.t + dt
 end
 
 function love.draw()
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.draw(global.canvases.main, 0, 0, 0, windowSize.width / designResolution.width, windowSize.height / designResolution.height)
-    global.canvases.main:clear(255, 255, 255, 255)
+    -- global.canvases.main:clear(255, 255, 255, 255)
 end
