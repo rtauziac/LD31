@@ -1,7 +1,7 @@
 -- player.lua
 
 local player = {
-    rectangle = Rectangle(500, 500, 200, 200, 0, 0, 0, 0, 0.1, 0.6, 0.8),
+    rectangle = Rectangle(designResolution.width/2, designResolution.height/2, 200, 200, 0, 0, 0, 0, 0.1, 0.6, 0.8),
     health = 1, -- the health of the player 1...0
     previousHealth = 1,
     speed = 250,
@@ -80,12 +80,9 @@ function player:update(dt)
    self.previousHealth = self.health
     if self.health <= 0 then
         if self.state ~= entityState.dead then
-            if self.state ~= entityState.hurt then
-                animationStartTime = os.time()
-                animationOffsetTime = 0 
-            end
+            animationOffsetTime = 0 
             self.state = entityState.dead
-            self.rectangle.airFriction = 0.5
+            self.rectangle.airFriction = 0.6
         end
     else
         if self.state == entityState.hurt and self.animationOffsetTime <= self.animations.hurt.duration then

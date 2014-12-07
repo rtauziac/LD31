@@ -34,6 +34,7 @@ entityState = {
     hurt = 2,
     dancing = 3,
     spawn = 4,
+    daying = 5,
     dead = -1
 }
 

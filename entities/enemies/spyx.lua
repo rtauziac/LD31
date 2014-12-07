@@ -1,6 +1,6 @@
 -- spyx.lua
 
-local size = Vector2(250, 120)
+local size = Vector2(230, 110)
 
 local spyxSharedData = {
     images = {
@@ -18,6 +18,19 @@ local spyxSharedData = {
             love.graphics.newImage("resources/spyx/spyx_spawn_5.png"),
             love.graphics.newImage("resources/spyx/spyx_spawn_6.png"),
             love.graphics.newImage("resources/spyx/spyx_spawn_7.png")
+        },
+        dying = {
+            love.graphics.newImage("resources/spyx/spyx_dying_1.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_2.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_3.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_4.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_5.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_6.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_7.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_8.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_9.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_10.png"),
+            love.graphics.newImage("resources/spyx/spyx_dying_11.png")
         }
     },
     timeBeforeSpawn = 0.53
@@ -27,6 +40,7 @@ local function new(x, y)
     local rand = math.random()* 2
     local spyx = {
         rectangle = Rectangle(x or 0, y or 0, size.x, size.y, 0, 0, 0, 0, 1, 0, 0.94),
+        speed = 40 + math.random()*20,
         lifetime = 5 + rand,
         totalLifeTime = 5 + rand,
         state = entityState.spawn,
@@ -36,35 +50,25 @@ local function new(x, y)
         
         animations = {
             running = {
-                offset = Vector2(-50, -70),
-                images = {
-                    -- love.graphics.newImage("resources/spyx/spyx_run_1.png"),
-                    -- love.graphics.newImage("resources/spyx/spyx_run_2.png"),
-                    -- love.graphics.newImage("resources/spyx/spyx_run_3.png"),
-                    -- love.graphics.newImage("resources/spyx/spyx_run_4.png")
-                    spyxSharedData.images.running[1],
-                    spyxSharedData.images.running[2],
-                    spyxSharedData.images.running[3],
-                    spyxSharedData.images.running[4]
-                },
+                offset = Vector2(-60, -80),
+                images = spyxSharedData.images.running,
                 animation = function (self, t)
                         return self.images[math.floor(1+(10*t%4))]
                     end
             },
             spawn = {
-                offset = Vector2(-50, -120),
-                images = {
-                    spyxSharedData.images.spawn[1],
-                    spyxSharedData.images.spawn[2],
-                    spyxSharedData.images.spawn[3],
-                    spyxSharedData.images.spawn[4],
-                    spyxSharedData.images.spawn[5],
-                    spyxSharedData.images.spawn[6],
-                    spyxSharedData.images.spawn[7]
-                },
+                offset = Vector2(-60, -130),
+                images = spyxSharedData.images.spawn,
                 animation = function (self, t)
                         return self.images[math.floor(1+(math.min(13*t, 6)))]
                     end,
+            },
+            dying = {
+                offset = Vector2(-60, -80),
+                images = spyxSharedData.images.dying,
+                animation = function (self, t)
+                        return self.images[math.floor(1+(math.min(13*t, 10)))]
+                    end
             }
         }
     }
@@ -81,12 +85,20 @@ local function new(x, y)
             end
         elseif self.state ~= entityState.dead then
             self.lifetime = self.lifetime - dt
+            
+            if self.lifetime < 0.7 then
+                if self.state ~= entityState.dying then
+                    self.state = entityState.dying
+                    self.animationOffsetTime = 0
+                end
+            end
+            
             local speed = 50
             local player = global.states.game.player
             local playerRectangle = player.rectangle
             local playerPos = playerRectangle.origin
             local direction = (playerPos - self.rectangle.origin):normalized()
-            local oldness = -(((self.lifetime/self.totalLifeTime)-1)^10)+1
+            local oldness = math.max(-((((self.lifetime - 0.7)/self.totalLifeTime)-1)^8)+1, 0)
             self.rectangle:applyForce({x = direction.x * speed * oldness, y = direction.y * speed * oldness})
             self.rectangle:update(dt, {global.states.game.world, global.states.game.enemyRectangles})
             if self.rectangle:intersects(playerRectangle) then--and player.state ~= entityState.dead then
@@ -95,9 +107,9 @@ local function new(x, y)
                 self.rectangle:applyForce({x = -direction.x * feedback, y = -direction.y * feedback})
                 playerRectangle:applyForce({x = direction.x * feedback, y = direction.y * feedback})
             end
-            if self.rectangle.origin.x > playerPos.x then
+            if self.rectangle.origin.x > playerPos.x  and self.state ~= entityState.dying then
                 self.facingRight = false
-            else
+            elseif self.state ~= entityState.dying then
                 self.facingRight = true
             end
         end
@@ -112,6 +124,9 @@ local function new(x, y)
         elseif self.state == entityState.running then
             sprite = self.animations.running:animation(self.animationOffsetTime)
             offset = self.animations.running.offset
+        elseif self.state == entityState.dying then
+            sprite = self.animations.dying:animation(self.animationOffsetTime)
+            offset = self.animations.dying.offset
         end
         love.graphics.setColor(255, 255, 255, 255)
         if sprite then
@@ -128,6 +143,7 @@ local function new(x, y)
     function spyx:spawn(x, y)
         local rand = math.random()* 2
         self.animationOffsetTime = 0
+        self.speed = 40 + math.random()*20
         self.rectangle.origin.x, self.rectangle.origin.y = x, y
         self.lifetime, self.totalLifeTime = 5 + rand, 5 + rand
         self.timeBeforeSpawn = spyxSharedData.timeBeforeSpawn

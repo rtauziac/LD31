@@ -6,7 +6,7 @@ function game:init()
     
     self.world = {
         Rectangle(100, 0, 100, designResolution.height),
-        Rectangle(0, 0, designResolution.width, 100),
+        Rectangle(0, 100, designResolution.width, 100),
         Rectangle(0, designResolution.height - 100, designResolution.width, 100),
         Rectangle(designResolution.width - 200, 0, 0, designResolution.height)
     }
@@ -20,9 +20,9 @@ function game:init()
     }
     self.planWave = function(self, level)
                 for i = 1, 1 + math.floor(level) do
-                    local rand = math.random()
+                    local rand = math.random() * (level/4)
                     local reuseSpyx, deadEnemyCount = nil, #self.instances.deadEnemies
-                    local randomX, randomY = 200 + math.random() * (designResolution.width - 400 - self.enemies.spyx.size.x), 300 + math.random() * (designResolution.height - 700)
+                    local randomX, randomY = 300 + math.random() * (designResolution.width - 500 - self.enemies.spyx.size.x), 300 + math.random() * (designResolution.height - 700)
                     if deadEnemyCount > 0 then
                         reuseSpyx = self.instances.deadEnemies[deadEnemyCount]
                         self.instances.deadEnemies[deadEnemyCount] = nil
@@ -45,9 +45,9 @@ function game:init()
     self.background = love.graphics.newImage("resources/background.jpg")
 end
 
--- function game:enter()
+function game:newGame()
     
--- end
+end
 
 function game:update(dt)
     self.player:update(dt)
@@ -72,8 +72,8 @@ function game:update(dt)
             direction.x = direction.x + 1
         end
         self.player.rectangle:applyForce(direction:normalized() * self.player.speed)
-        self.player.rectangle:update(dt, {self.world})
     end
+    self.player.rectangle:update(dt, {self.world})
     
     for i, plan in ipairs(self.waves) do    
         local t = global.t
