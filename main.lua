@@ -16,7 +16,7 @@ windowSize = {
 }
 
 sounds = {
-    static = love.audio.newSource("resources/static.mp3", "stream"),
+    static = love.audio.newSource("resources/static.ogg", "stream"),
     step = love.audio.newSource("resources/step.ogg", "static"),
     death = love.audio.newSource("resources/death.ogg", "static"),
     ouch = love.audio.newSource("resources/ouch.ogg", "static"),

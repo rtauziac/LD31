@@ -190,6 +190,8 @@ function game:draw()
             decimals = self.numbers.eight
         elseif floor(self.score/10)%10 == 9 then
             decimals = self.numbers.nine
+        else
+            decimals = self.numbers.zero
         end
         
         if floor(self.score/100)%10 == 1 then
@@ -210,6 +212,8 @@ function game:draw()
             hundreds = self.numbers.eight
         elseif floor(self.score/100)%10 == 9 then
             hundreds = self.numbers.nine
+        else
+            hundreds = self.numbers.zero
         end
         
         if floor(self.score/1000)%10 == 1 then
@@ -230,17 +234,25 @@ function game:draw()
             thousands = self.numbers.eight
         elseif floor(self.score/1000)%10 == 9 then
             thousands = self.numbers.nine
+        else
+            thousands = self.numbers.zero
         end
         
         local offset = 0
-        if decimals == nil then
-            offset = -125
-        elseif hundreds == nil then
-            offset = -75
-        elseif thousands == nil then
-            offset = 25
-        else
+        if thousands ~= self.numbers.zero then
             offset = 125
+        elseif hundreds ~= self.numbers.zero then
+            thousands = nil
+            offset = 25
+        elseif decimals ~= self.numbers.zero then
+            thousands = nil
+            hundreds = nil
+            offset = -75
+        else
+            thousands = nil
+            hundreds = nil
+            decimals = nil
+            offset = -125
         end
         love.graphics.draw(unit, designResolution.width / 2 + offset, designResolution.height / 2 - 125, 0, 0.5, 0.5)
         if decimals ~= nil then
