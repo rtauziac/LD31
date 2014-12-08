@@ -90,7 +90,7 @@ local function new(x, y)
         elseif self.state ~= entityState.dead then
             local player = global.states.game.player
             if player.state == entityState.dead then
-                self.lifetime = self.lifetime - (dt*20)
+                self.lifetime = self.lifetime - (dt*2)
             else
                 self.lifetime = self.lifetime - dt
             end
