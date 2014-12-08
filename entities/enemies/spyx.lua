@@ -1,6 +1,6 @@
 -- spyx.lua
 
-local size = Vector2(230, 110)
+local size = Vector2(115, 55)
 
 local spyxSharedData = {
     images = {
@@ -39,8 +39,8 @@ local spyxSharedData = {
 local function new(x, y)
     local rand = math.random()* 2
     local spyx = {
-        rectangle = Rectangle(x or 0, y or 0, size.x, size.y, 0, 0, 0, 0, 1, 0, 0.94),
-        speed = 40 + math.random()*20,
+        rectangle = Rectangle(x or 0, y or 0, size.x, size.y, 0, 0, 0, 0, 1, 0, 0.9),
+        speed = 15 + math.random()*10,
         lifetime = 5 + rand,
         totalLifeTime = 5 + rand,
         state = entityState.spawn,
@@ -50,21 +50,21 @@ local function new(x, y)
         
         animations = {
             running = {
-                offset = Vector2(-60, -80),
+                offset = Vector2(-30, -40),
                 images = spyxSharedData.images.running,
                 animation = function (self, t)
                         return self.images[math.floor(1+(10*t%4))]
                     end
             },
             spawn = {
-                offset = Vector2(-60, -130),
+                offset = Vector2(-30, -65),
                 images = spyxSharedData.images.spawn,
                 animation = function (self, t)
                         return self.images[math.floor(1+(math.min(13*t, 6)))]
                     end,
             },
             dying = {
-                offset = Vector2(-60, -80),
+                offset = Vector2(-30, -40),
                 images = spyxSharedData.images.dying,
                 animation = function (self, t)
                         return self.images[math.floor(1+(math.min(13*t, 10)))]
@@ -137,9 +137,9 @@ local function new(x, y)
         love.graphics.setColor(255, 255, 255, 255)
         if sprite then
             if self.facingRight then
-                love.graphics.draw(sprite, self.rectangle.origin.x + offset.x, self.rectangle.origin.y + offset.y)
+                love.graphics.draw(sprite, self.rectangle.origin.x + offset.x, self.rectangle.origin.y + offset.y, 0, 0.5, 0.5)
             else 
-                love.graphics.draw(sprite, self.rectangle.origin.x + (self.rectangle.size.x - offset.x), self.rectangle.origin.y + offset.y, 0, -1, 1)
+                love.graphics.draw(sprite, self.rectangle.origin.x + (self.rectangle.size.x - offset.x), self.rectangle.origin.y + offset.y, 0, -0.5, 0.5)
             end
         end
         -- love.graphics.setColor(0, 0, 0, 255)

@@ -8,6 +8,8 @@ Rectangle = require "rectangle"
 
 Nil = {} -- a nil pointer
 
+math.randomseed(os.time())
+
 windowSize = {
     width = 0,
     height = 0
@@ -26,7 +28,7 @@ sounds = {
 global = {
     t = 0,
     constants = {
-        feedback = 700
+        feedback = 450
     },
     canvases = {
         main = Nil -- set in load()

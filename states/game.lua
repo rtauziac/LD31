@@ -23,10 +23,10 @@ function game:init()
     }
     sounds.static:setLooping(true)
     self.world = {
-        Rectangle(100, 0, 100, designResolution.height),
-        Rectangle(0, 100, designResolution.width, 100),
-        Rectangle(0, designResolution.height - 100, designResolution.width, 100),
-        Rectangle(designResolution.width - 200, 0, 0, designResolution.height)
+        Rectangle(0, 0, 80, designResolution.height),
+        Rectangle(0, 0, designResolution.width, 100),
+        Rectangle(0, designResolution.height - 20, designResolution.width, 50),
+        Rectangle(designResolution.width - 100, 0, 0, designResolution.height)
     }
     self.state = states.playing
     self.player = require "entities.player"
@@ -63,6 +63,8 @@ function game:init()
     self.enemyRectangles = {
     }
     self.background = love.graphics.newImage("resources/background.jpg")
+    self.backgroundBottom = love.graphics.newImage("resources/backgroundBottom.png")
+    self.returnRestart = love.graphics.newImage("resources/enter restart.png")
 end
 
 function game:enter()
@@ -232,25 +234,28 @@ function game:draw()
         
         local offset = 0
         if decimals == nil then
-            offset = -350
+            offset = -125
         elseif hundreds == nil then
-            offset = -150
+            offset = -75
         elseif thousands == nil then
-            offset = 50
+            offset = 25
         else
-            offset = 250
+            offset = 125
         end
-        love.graphics.draw(unit, designResolution.width / 2 + offset, designResolution.height / 2 - 250)
+        love.graphics.draw(unit, designResolution.width / 2 + offset, designResolution.height / 2 - 125, 0, 0.5, 0.5)
         if decimals ~= nil then
-            love.graphics.draw(decimals, designResolution.width / 2 + offset - 400, designResolution.height / 2 - 250)
+            love.graphics.draw(decimals, designResolution.width / 2 + offset - 200, designResolution.height / 2 - 125, 0, 0.5, 0.5)
         end
         if hundreds ~= nil then
-            love.graphics.draw(hundreds, designResolution.width / 2 + offset - 400 - 400, designResolution.height / 2 - 250)
+            love.graphics.draw(hundreds, designResolution.width / 2 + offset - 200 - 200, designResolution.height / 2 - 125, 0, 0.5, 0.5)
         end
         if thousands ~= nil then
-            love.graphics.draw(thousands, designResolution.width / 2 + offset - 400 - 400 - 400, designResolution.height / 2 - 250)
+            love.graphics.draw(thousands, designResolution.width / 2 + offset - 200 - 200 - 200, designResolution.height / 2 - 125, 0, 0.5, 0.5)
         end
+        love.graphics.draw(self.returnRestart, designResolution.width/2 - self.returnRestart:getWidth()/4, designResolution.height/1.4, 0, 0.5, 0.5)
     end
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.draw(self.backgroundBottom, 0, designResolution.height-self.backgroundBottom:getHeight())
     love.graphics.setCanvas()
 end
 

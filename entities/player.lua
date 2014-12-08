@@ -5,10 +5,10 @@ local playerSharedData = {
 }
 
 local player = {
-    rectangle = Rectangle(designResolution.width/2, designResolution.height/2, 200, 200, 0, 0, 0, 0, 0.1, 0.6, playerSharedData.startAirFriction),
+    rectangle = Rectangle(designResolution.width/2, designResolution.height/2, 100, 100, 0, 0, 0, 0, 0.1, 0.6, playerSharedData.startAirFriction),
     health = 1, -- the health of the player 1...0
     previousHealth = 1,
-    speed = 250,
+    speed = 125,
     state = entityState.idle, -- the state of the player, defines the behavior and the animations
     facingRight = true, -- defines the direction where the player looks
     animationOffsetTime = 0 ,-- the offset of the animation
@@ -17,7 +17,7 @@ local player = {
     },
     animations = {
         idle = {
-            offset = Vector2(0, -240),
+            offset = Vector2(0, -120),
             images = {
                 love.graphics.newImage("resources/eye/eye_idle_1.png"),
                 love.graphics.newImage("resources/eye/eye_idle_2.png"),
@@ -30,7 +30,7 @@ local player = {
                 end
         },
         running = {
-            offset = Vector2(-50, -170),
+            offset = Vector2(-25, -85),
             images = {
                 love.graphics.newImage("resources/eye/eye_run_1.png"),
                 love.graphics.newImage("resources/eye/eye_run_2.png"),
@@ -43,7 +43,7 @@ local player = {
                 end
         },
         hurt = {
-            offset = Vector2(-92, -250),
+            offset = Vector2(-56, -125),
             images = {
                 love.graphics.newImage("resources/eye/eye_hurt_1.png"),
                 love.graphics.newImage("resources/eye/eye_hurt_2.png"),
@@ -57,7 +57,7 @@ local player = {
             duration = 0.4
         },
         death = {
-            offset = Vector2(-52, -250),
+            offset = Vector2(-26, -125),
             images = {
                 love.graphics.newImage("resources/eye/eye_death_1.png"),
                 love.graphics.newImage("resources/eye/eye_death_2.png"),
@@ -100,7 +100,8 @@ function player:update(dt)
             -- if self.state ~= entityState.hurt then
                 -- animationOffsetTime = 0
             -- end
-        elseif self.rectangle.velocity:len2() > 300000 then
+                
+        elseif self.rectangle.velocity:len2() > 100000 then
             if self.state ~= entityState.running then
                 -- print("running")
                 self.animationOffsetTime = 0
@@ -147,9 +148,9 @@ function player:draw()
         offset = self.animations.death.offset
     end
     if self.facingRight then
-        love.graphics.draw(sprite, self.rectangle.origin.x + offset.x, self.rectangle.origin.y + offset.y)
+        love.graphics.draw(sprite, self.rectangle.origin.x + offset.x, self.rectangle.origin.y + offset.y, 0, 0.5, 0.5)
     else 
-        love.graphics.draw(sprite, self.rectangle.origin.x + (self.rectangle.size.x - offset.x), self.rectangle.origin.y + offset.y, 0, -1, 1)
+        love.graphics.draw(sprite, self.rectangle.origin.x + (self.rectangle.size.x - offset.x), self.rectangle.origin.y + offset.y, 0, -0.5, 0.5)
     end
     -- love.graphics.setColor(0, 0, 0, 255)
     -- love.graphics.rectangle("line", self.rectangle.origin.x, self.rectangle.origin.y, self.rectangle.size.x, self.rectangle.size.y)
