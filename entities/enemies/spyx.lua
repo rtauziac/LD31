@@ -40,7 +40,7 @@ local function new(x, y)
     local rand = math.random()* 2
     local spyx = {
         rectangle = Rectangle(x or 0, y or 0, size.x, size.y, 0, 0, 0, 0, 1, 0, 0.9),
-        speed = 15 + math.random()*10,
+        speed = 30 + math.random()*5,
         lifetime = 5 + rand,
         totalLifeTime = 5 + rand,
         state = entityState.spawn,
@@ -88,7 +88,12 @@ local function new(x, y)
                 self.state = entityState.running
             end
         elseif self.state ~= entityState.dead then
-            self.lifetime = self.lifetime - dt
+            local player = global.states.game.player
+            if player.state == entityState.dead then
+                self.lifetime = self.lifetime - (dt*20)
+            else
+                self.lifetime = self.lifetime - dt
+            end
             
             if self.lifetime < 0.7 then
                 if self.state ~= entityState.dying then
@@ -99,8 +104,7 @@ local function new(x, y)
                 end
             end
             
-            local speed = 50
-            local player = global.states.game.player
+            local speed = self.speed
             local playerRectangle = player.rectangle
             local playerPos = playerRectangle.origin
             local direction = (playerPos - self.rectangle.origin):normalized()

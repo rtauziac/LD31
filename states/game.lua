@@ -72,7 +72,7 @@ function game:enter()
 end
 
 function game:newGame()
-    self.level = 0
+    self.level = 10
     self.score = 0
     self.state = states.playing
     self.player:respawn()
