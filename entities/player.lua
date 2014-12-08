@@ -54,7 +54,7 @@ local player = {
             animation = function (self, t)
                     return self.images[math.floor(1+(math.min(13*t, 4)))]
                 end,
-            duration = 0.4
+            duration = 0.43
         },
         death = {
             offset = Vector2(-26, -125),
@@ -79,52 +79,54 @@ local player = {
 
 function player:update(dt)
     self.animationOffsetTime = self.animationOffsetTime + dt
-    
     if self.health < self.previousHealth and self.health >= 0 then
-        self.state = entityState.hurt
-        animationOffsetTime = 0
         sounds.ouch:setPitch(0.8 + math.random()*0.4)
         sounds.ouch:play()
     end
    self.previousHealth = self.health
     if self.health <= 0 then
         if self.state ~= entityState.dead then
-            animationOffsetTime = 0 
-            print(self.state)
+            self.animationOffsetTime = 0 
             self.state = entityState.dead
             sounds.death:play()
             self.rectangle.airFriction = playerSharedData.startAirFriction * 0.6
         end
     else
-        if self.state == entityState.hurt and self.animationOffsetTime <= self.animations.hurt.duration then
+        -- if self.state == entityState.hurt and self.animationOffsetTime <= self.animations.hurt.duration then
             -- if self.state ~= entityState.hurt then
                 -- animationOffsetTime = 0
             -- end
-                
-        elseif self.rectangle.velocity:len2() > 100000 then
-            if self.state ~= entityState.running then
-                -- print("running")
-                self.animationOffsetTime = 0
-            end
-            if self.soundSchedule.step > self.animationOffsetTime % 0.23 then
-                sounds.step:rewind()
-                sounds.step:setPitch(0.8 + math.random()*0.4)
-                sounds.step:play()
-            end
-            self.soundSchedule.step = self.animationOffsetTime % 0.23
-            self.state = entityState.running
-        else
-            if self.state ~= entityState.idle then
-                -- print("idle")
-                self.animationOffsetTime = 0
-            end
-            self.state = entityState.idle
-        end
         
-        if self.rectangle.velocity.x < -0.3 then
-            self.facingRight = false
-        elseif self.rectangle.velocity.x > 0.3 then
-            self.facingRight = true
+        if self.state == entityState.hurt and self.animationOffsetTime <= self.animations.hurt.duration then
+        else
+        -- print(self.animationOffsetTime, self.animations.hurt.duration)
+            if self.rectangle.velocity:len2() > 100000 then
+                if self.state ~= entityState.running then
+                    -- print("running")
+                    self.animationOffsetTime = 0
+                end
+                if self.soundSchedule.step > self.animationOffsetTime % 0.23 then
+                    sounds.step:rewind()
+                    sounds.step:setPitch(0.8 + math.random()*0.4)
+                    sounds.step:play()
+                end
+                self.soundSchedule.step = self.animationOffsetTime % 0.23
+                self.state = entityState.running
+            else
+                if self.state ~= entityState.idle then
+                    -- print("idle")
+                    self.animationOffsetTime = 0
+                end
+                self.state = entityState.idle
+            end
+            
+            -- if self.state ~= entityState.hurt then
+                if self.rectangle.velocity.x < -0.3 then
+                    self.facingRight = false
+                elseif self.rectangle.velocity.x > 0.3 then
+                    self.facingRight = true
+                end
+            -- end
         end
     end -- dead
 end
@@ -157,6 +159,12 @@ function player:draw()
 end
 
 function player:hurt(damage)
+    if self.state ~= entityState.hurt then
+        self.animationOffsetTime = 0
+        self.state = entityState.hurt
+        -- print("damage")
+        -- print(tostring(self.state == entityState.hurt), tostring(self.animationOffsetTime <= self.animations.hurt.duration))
+    end
     self.health = self.health - damage
 end
 

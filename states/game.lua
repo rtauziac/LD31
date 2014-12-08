@@ -81,8 +81,8 @@ function game:newGame()
 end
 
 function game:update(dt)
+    self.player:update(dt)
     if self.state == states.playing then
-        self.player:update(dt)
         
         if self.player.state ~= entityState.dead then
             local direction = Vector2(0, 0)

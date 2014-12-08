@@ -107,7 +107,7 @@ local function new(x, y)
             local oldness = math.max(-((((self.lifetime - 0.7)/self.totalLifeTime)-1)^8)+1, 0)
             self.rectangle:applyForce({x = direction.x * speed * oldness, y = direction.y * speed * oldness})
             self.rectangle:update(dt, {global.states.game.world, global.states.game.enemyRectangles})
-            if self.rectangle:intersects(playerRectangle) then--and player.state ~= entityState.dead then
+            if self.rectangle:intersects(playerRectangle) and player.state ~= entityState.dead then
                 local feedback = global.constants.feedback
                 player:hurt(0.05)
                 self.rectangle:applyForce({x = -direction.x * feedback, y = -direction.y * feedback})
