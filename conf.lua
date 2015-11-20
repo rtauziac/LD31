@@ -9,7 +9,7 @@
     t.window.minwidth = 800            -- Minimum window width if the window is resizable (number)
     t.window.minheight = 450           -- Minimum window height if the window is resizable (number)
     t.window.resizable = true
-    t.window.highdpi = true            -- Enable high-dpi mode for the window on a Retina display (boolean). Added in 0.9.1
+    t.window.highdpi = false            -- Enable high-dpi mode for the window on a Retina display (boolean). Added in 0.9.1
     t.window.display = 1               -- Index of the monitor to show the window in (number)
 
     t.modules.audio = true             -- Enable the audio module (boolean)
