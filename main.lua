@@ -55,7 +55,7 @@ function love.load()
     global.canvases.main:setFilter("nearest")
     Gamestate.registerEvents()
     Gamestate.switch(global.states.game)
-    windowSize.width, windowSize.height = love.window.getDimensions()
+    windowSize.width, windowSize.height = love.window.getMode()
 end
 
 function love.resize(w, h)
