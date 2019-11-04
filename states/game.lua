@@ -76,7 +76,7 @@ function game:newGame()
     self.score = 0
     self.state = states.playing
     self.player:respawn()
-    sounds.static:rewind()
+    sounds.static:seek(0)
     sounds.static:play()
 end
 

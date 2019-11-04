@@ -106,7 +106,7 @@ function player:update(dt)
                     self.animationOffsetTime = 0
                 end
                 if self.soundSchedule.step > self.animationOffsetTime % 0.23 then
-                    sounds.step:rewind()
+                    sounds.step:seek(0)
                     sounds.step:setPitch(0.8 + math.random()*0.4)
                     sounds.step:play()
                 end
